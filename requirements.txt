@@ -2,3 +2,4 @@ Flask==3.0.3
 python-dotenv==1.0.1
 openai>=1.55.3
 Markdown==3.7
+gunicorn==23.0.0
