@@ -1,0 +1,117 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Pocket Smart AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet"><style>:root{--ink:#0E2F2E;--leaf:#1F6F5C;--mist:#EEF3F1;--paper:#fff;--gold:#F2A900;--line:#D5E0DC;--muted:#5B7370;--coral:#C8402F;
+--head:'Sora',system-ui,sans-serif;--body:'Source Sans 3',system-ui,sans-serif}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#E6F2EF;--leaf:#5CC2A6;--mist:#0B1A19;--paper:#12292752;--line:#25403D;--muted:#93B0AB;--coral:#FF8A78}}
+*{box-sizing:border-box}html{scroll-padding-top:70px}
+body{margin:0;font:17px/1.55 var(--body);color:var(--ink);background:var(--mist)}
+h1,h2,h3{font-family:var(--head);line-height:1.15;margin:0 0 .5em;letter-spacing:-.02em}
+h1{font-size:clamp(2rem,5vw,3.4rem)}h2{font-size:1.5rem}h3{font-size:1.1rem}
+a{color:var(--leaf)}:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;padding:.9rem 1.5rem;border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:5;backdrop-filter:blur(8px)}
+.brand{font:700 1.15rem var(--head);text-decoration:none;color:var(--ink)}.brand b{color:var(--gold)}
+.nav nav{display:flex;gap:1.1rem;flex-wrap:wrap;align-items:center}.nav nav a{text-decoration:none;color:var(--ink);font-weight:600}
+.nav nav a:hover{color:var(--leaf)}
+main{max-width:1080px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:1.4rem}
+.grid{display:grid;gap:1.25rem}.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+label{display:block;font-weight:600;margin:.8rem 0 .25rem;font-size:.95rem}
+input,select,textarea{width:100%;padding:.65rem .8rem;border:1px solid var(--line);border-radius:8px;font:inherit;color:var(--ink);background:var(--paper)}
+textarea{min-height:90px;resize:vertical}
+.btn{display:inline-block;margin-top:1rem;padding:.7rem 1.3rem;border:0;border-radius:8px;background:var(--ink);color:var(--mist);font:600 1rem var(--head);cursor:pointer;text-decoration:none}
+.btn:hover{background:var(--leaf);color:#fff}.btn.gold{background:var(--gold);color:#1a1200}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:.3rem .7rem;font-size:.85rem;margin:0}
+.flash{padding:.75rem 1rem;border-radius:8px;margin-bottom:1rem;font-weight:600}
+.flash.success{background:#DDF2E8;color:#0d5a3b}.flash.error{background:#FBE4E0;color:#8c2415}
+.stat{font:700 1.9rem var(--head)}.muted{color:var(--muted);font-size:.95rem}
+.bar{height:12px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:.6rem}
+.bar i{display:block;height:100%;background:var(--leaf)}.bar i.over{background:var(--coral)}
+table{width:100%;border-collapse:collapse;margin:.8rem 0}th,td{padding:.55rem .6rem;text-align:left;border-bottom:1px solid var(--line)}
+th{font-family:var(--head);font-size:.9rem}
+.result{border-left:4px solid var(--gold)}.result img,.thumb{max-width:100%;border-radius:10px;margin-top:.8rem}
+.thumb{max-height:180px}
+.hero{padding:4rem 0 2.5rem;max-width:760px}.hero p{font-size:1.2rem;color:var(--muted);max-width:56ch}
+.auth{max-width:420px;margin:3rem auto}
+.chat-out{min-height:60px;margin-top:1rem;padding:.8rem;border-radius:8px;background:var(--mist)}
+details.card summary{cursor:pointer;font-weight:600;list-style:none}
+.tag{display:inline-block;padding:.1rem .6rem;border-radius:99px;background:var(--gold);color:#1a1200;font-size:.8rem;font-weight:700;margin-right:.5rem}
+footer{text-align:center;color:var(--muted);padding:2rem 1rem;font-size:.9rem}
+@media(prefers-reduced-motion:no-preference){.btn{transition:background .2s}}
+:root[data-theme="dark"]{--ink:#E6F2EF;--leaf:#5CC2A6;--mist:#0B1A19;--paper:#12292752;--line:#25403D;--muted:#93B0AB;--coral:#FF8A78}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav{top:env(safe-area-inset-top,0px)}button:disabled{opacity:.6;cursor:wait}
+.donut{width:200px;height:200px;border-radius:50%;margin:0 auto;-webkit-mask:radial-gradient(circle 62px,transparent 98%,#000 100%);mask:radial-gradient(circle 62px,transparent 98%,#000 100%)}
+.result table{font-size:.95rem}.result ul{padding-left:1.2rem}
+</style></head><body><div id="app"></div><script>const K='psai_v1',CATS=['Food','Transport','Shopping','Bills','Health','Entertainment','Other'],COL=['#1F6F5C','#F2A900','#C8402F','#3B8EA5','#8E6C8A','#6DAA75','#9AA5A3'];
+const SYSTEM="You are Pocket Smart AI, a practical budgeting and shopping-recommendation assistant for users in India. Use rupees (₹). Be specific, realistic and concise. Answer in markdown: short summary, a budget split table (| Item | Share | Amount |), 3-5 concrete recommendations, 2 money-saving tips. Never exceed the user's budget.";
+const PL={
+home:{title:'Home planner',intro:'Furnish or refresh a room without overspending.',split:[['Furniture',40],['Decor & soft furnishings',20],['Lighting',15],['Storage & organisers',15],['Contingency',10]],f:[['room','Room','select',['Living room','Bedroom','Kitchen','Home office','Kids room']],['style','Style','select',['Modern minimal','Traditional Indian','Scandinavian','Boho','Industrial']],['size','Room size','text','e.g. 12 x 14 ft'],['priorities','Priorities','textarea','Storage, natural light, pet friendly...']]},
+jewelry:{title:'Jewelry planner',intro:'Find the right piece for the right occasion, with making charges accounted for.',split:[['Main piece',60],['Matching accessories',20],['Making / hallmarking charges',12],['Insurance & box',8]],f:[['occasion','Occasion','select',['Wedding','Engagement','Anniversary','Festival','Daily wear','Gift']],['type','Jewelry type','select',['Necklace','Earrings','Ring','Bangles','Full set']],['metal','Metal','select',['Gold 22K','Gold 18K','Diamond','Silver','Platinum']],['preferences','Recipient and taste','textarea','For my mother, prefers temple designs...']]},
+party:{title:'Party planner',intro:'Plan the whole event and keep a contingency for surprises.',split:[['Venue',30],['Food & drinks',35],['Decor',15],['Entertainment',10],['Contingency',10]],f:[['event','Event type','select',['Birthday','Wedding reception','Baby shower','House warming','Corporate get-together']],['guests','Number of guests','number','40'],['venue','City / venue preference','text','Chennai, home terrace, banquet hall...'],['theme','Theme and food','textarea','Pastel theme, vegetarian buffet...']]}};
+let S=JSON.parse(localStorage.getItem(K)||'null')||{users:[],session:null,expenses:[],plans:[]};
+try{S=Object.assign({users:[],session:null,expenses:[],plans:[]},S)}catch(e){}
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){flash('error','Storage is full. Delete old plans to save more.')}};
+let view='index',msg=null,busy=false;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr=n=>'₹'+Math.round(n||0).toLocaleString('en-IN');
+const me=()=>S.users.find(u=>u.id===S.session);
+const flash=(c,t)=>{msg={c,t}};
+async function hash(p){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('psai:'+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function md(t){let o='',tb=false,ul=false;const inl=s=>s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>');
+const ct=()=>{if(tb){o+='</table>';tb=false}},cu=()=>{if(ul){o+='</ul>';ul=false}};
+for(const l of esc(t).split('\n')){
+if(/^\s*\|/.test(l)){cu();if(/^\s*\|[\s\-|:]+\|\s*$/.test(l))continue;const c=l.trim().replace(/^\||\|$/g,'').split('|').map(x=>inl(x.trim()));const tag=tb?'td':'th';if(!tb){o+='<table>';tb=true}o+='<tr>'+c.map(x=>`<${tag}>${x}</${tag}>`).join('')+'</tr>';continue}
+ct();
+if(/^\s*[-*] /.test(l)){if(!ul){o+='<ul>';ul=true}o+='<li>'+inl(l.replace(/^\s*[-*] /,''))+'</li>';continue}
+cu();
+const h=l.match(/^#{1,4} (.*)/);if(h)o+='<h3>'+inl(h[1])+'</h3>';else if(l.trim())o+='<p>'+inl(l)+'</p>'}
+ct();cu();return o}
+let sp=null;const getS=()=>sp||(sp=(window.claude?claude.use('sample'):Promise.resolve(null)).catch(()=>null));
+async function ai(prompt,on){const s=await getS();if(!s)return null;try{const r=await s(SYSTEM+'\n\n'+prompt,{onText:x=>on&&on(x.text),cache:false});return r.text}catch(e){return null}}
+function fallback(kind,b,d){const rows=PL[kind].split.map(([n,p])=>`| ${n} | ${p}% | ${inr(b*p/100)} |`).join('\n');
+return `### ${PL[kind].title} - ${inr(b)}\nBuilt from your inputs (${Object.entries(d).map(([k,v])=>k+': '+v).join(', ')||'no extra preferences'}).\n\n| Item | Share | Amount |\n|---|---|---|\n${rows}\n\n**Tips**\n\n- Compare at least three vendors or stores before paying.\n- Keep the contingency untouched until the last week.\n\n*Offline planner in use. The AI assistant was unavailable.*`}
+function monthData(){const m=new Date().toISOString().slice(0,7),by={};S.expenses.filter(e=>e.uid===S.session&&e.on.startsWith(m)).forEach(e=>by[e.cat]=(by[e.cat]||0)+e.amt);return{by,spent:Object.values(by).reduce((a,b)=>a+b,0)}}
+const nav=()=>S.session?`<header class="nav"><a class="brand" data-go="dashboard" href="#">Pocket <b>Smart</b> AI</a><nav>${[['dashboard','Dashboard'],['home','Home'],['jewelry','Jewelry'],['party','Party'],['history','History']].map(([v,t])=>`<a href="#" data-go="${v}" ${view===v?'aria-current="page" style="color:var(--leaf)"':''}>${t}</a>`).join('')}<a href="#" data-act="logout">Log out</a></nav></header>`:`<header class="nav"><a class="brand" data-go="index" href="#">Pocket <b>Smart</b> AI</a><nav><a href="#" data-go="login">Log in</a><a class="btn gold sm" href="#" data-go="register">Create account</a></nav></header>`;
+const fl=()=>{const m=msg;msg=null;return m?`<div class="flash ${m.c}" role="status">${esc(m.t)}</div>`:''};
+const V={
+index:()=>`<div class="hero"><h1>Know what you can spend before you spend it.</h1><p>Track your monthly budget, then ask the AI to plan your next home makeover, jewelry purchase or party, down to the rupee.</p><a class="btn gold" href="#" data-go="register">Start free</a> <a class="btn ghost" href="#" data-go="login">I have an account</a></div><div class="grid g3"><div class="card"><h3>Budget tracker</h3><p class="muted">Log expenses, watch your category chart and see what is left this month.</p></div><div class="card"><h3>Three smart planners</h3><p class="muted">Home, jewelry and party plans that never exceed the budget you set.</p></div><div class="card"><h3>Ask anything</h3><p class="muted">Chat with an assistant that knows your real spending this month.</p></div></div>`,
+login:()=>`<div class="auth card"><h2>Log in</h2>${fl()}<form data-form="login"><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="email"><label for="password">Password</label><input id="password" name="password" type="password" required autocomplete="current-password"><button class="btn" type="submit">Log in</button></form><p class="muted" style="margin-top:1rem">New here? <a href="#" data-go="register">Create an account</a></p></div>`,
+register:()=>`<div class="auth card"><h2>Create account</h2>${fl()}<form data-form="register"><label for="name">Name</label><input id="name" name="name" required autocomplete="name"><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="email"><label for="password">Password (6+ characters)</label><input id="password" name="password" type="password" minlength="6" required autocomplete="new-password"><button class="btn" type="submit">Create account</button></form><p class="muted" style="margin-top:1rem">Already registered? <a href="#" data-go="login">Log in</a></p></div>`,
+dashboard:()=>{const u=me(),{by,spent}=monthData(),b=u.budget,pct=b?spent/b*100:0,tot=spent||1;let a=0;const cg=Object.keys(by).length?Object.keys(by).map(k=>{const s=a;a+=by[k]/tot*100;return`${COL[CATS.indexOf(k)]} ${s}% ${a}%`}).join(','):'';
+const ex=S.expenses.filter(e=>e.uid===u.id).sort((x,y)=>y.on.localeCompare(x.on)||y.id-x.id).slice(0,15);
+return`${fl()}<h1 style="font-size:2rem">Hi ${esc(u.name)}, here is your month.</h1>
+<div class="grid g3"><div class="card"><span class="muted">Monthly budget</span><div class="stat">${inr(b)}</div><form data-form="budget" style="display:flex;gap:.4rem;margin-top:.5rem"><input name="budget" type="number" min="1" step="any" placeholder="New budget" aria-label="New monthly budget"><button class="btn sm ghost" type="submit">Set</button></form></div>
+<div class="card"><span class="muted">Spent</span><div class="stat">${inr(spent)}</div><div class="bar"><i class="${pct>100?'over':''}" style="width:${Math.min(pct,100)}%"></i></div><span class="muted">${Math.round(pct)}% used</span></div>
+<div class="card"><span class="muted">${b>=spent?'Left to spend':'Over budget by'}</span><div class="stat" style="${spent>b?'color:var(--coral)':''}">${inr(Math.abs(b-spent))}</div></div></div>
+<div class="grid g2" style="margin-top:1.25rem"><div class="card"><h2>Add expense</h2><form data-form="expense"><label for="title">What was it?</label><input id="title" name="title" placeholder="Lunch, auto fare..."><label for="amount">Amount (₹)</label><input id="amount" name="amount" type="number" min="1" step="any" required><label for="category">Category</label><select id="category" name="category">${CATS.map(c=>`<option>${c}</option>`).join('')}</select><label for="on">Date</label><input id="on" name="on" type="date" value="${new Date().toISOString().slice(0,10)}"><button class="btn" type="submit">Add expense</button></form></div>
+<div class="card"><h2>Spending by category</h2>${cg?`<div class="donut" style="background:conic-gradient(${cg})" role="img" aria-label="Spending by category"></div><p class="muted" style="margin-top:.8rem">${Object.keys(by).map(k=>`<span style="color:${COL[CATS.indexOf(k)]}">&#9679;</span> ${k} ${inr(by[k])}`).join(' &nbsp; ')}</p>`:'<p class="muted">No expenses this month yet. Add your first one to see the chart.</p>'}</div></div>
+<section class="card" style="margin-top:1.25rem"><h2>Ask Pocket Smart AI</h2><p class="muted">Try: "Where can I cut ₹3,000 this month?"</p><form data-form="ask" style="display:flex;gap:.5rem;flex-wrap:wrap"><input name="q" style="flex:1;min-width:220px" aria-label="Your question" placeholder="Ask about your budget..."><button class="btn gold" style="margin:0" type="submit">Ask</button></form><div id="out" class="chat-out" aria-live="polite">Answers appear here.</div></section>
+<section class="card" style="margin-top:1.25rem"><h2>Recent expenses</h2>${ex.length?`<div style="overflow-x:auto"><table><tr><th>Date</th><th>Item</th><th>Category</th><th>Amount</th><th></th></tr>${ex.map(e=>`<tr><td>${e.on}</td><td>${esc(e.title)}</td><td>${e.cat}</td><td>${inr(e.amt)}</td><td><button class="btn sm ghost" data-act="delex" data-id="${e.id}" aria-label="Delete ${esc(e.title)}">Delete</button></td></tr>`).join('')}</table></div>`:'<p class="muted">Nothing logged yet.</p>'}</section>`},
+planner:k=>{const p=PL[k];return`${fl()}<h1 style="font-size:2rem">${p.title}</h1><p class="muted">${p.intro}</p><div class="grid g2"><div class="card"><form data-form="plan" data-kind="${k}"><label for="budget">Total budget (₹)</label><input id="budget" name="budget" type="number" min="1" step="any" required>${p.f.map(([n,l,t,o])=>`<label for="${n}">${l}</label>`+(t==='select'?`<select id="${n}" name="${n}">${o.map(x=>`<option>${x}</option>`).join('')}</select>`:t==='textarea'?`<textarea id="${n}" name="${n}" placeholder="${o}"></textarea>`:`<input id="${n}" name="${n}" type="${t}" placeholder="${o}">`)).join('')}<label for="ref">Reference image (optional)</label><input id="ref" name="ref" type="file" accept="image/png,image/jpeg,image/webp"><button class="btn gold" type="submit">Create my plan</button></form></div><div class="card result" id="res" aria-live="polite"><h3>Your plan appears here</h3><p class="muted">Fill in the form and the assistant will split your budget and suggest what to buy.</p></div></div>`},
+history:()=>{const ps=S.plans.filter(p=>p.uid===S.session).sort((a,b)=>b.id-a.id);return`${fl()}<h1 style="font-size:2rem">Your saved plans</h1>`+(ps.length?ps.map(p=>`<details class="card" style="margin-bottom:1rem"><summary><span class="tag">${PL[p.kind].title}</span>${inr(p.budget)} <span class="muted">- ${new Date(p.id).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'})}</span></summary><p class="muted">${Object.entries(p.d).map(([k,v])=>esc(k)+': '+esc(v)).join('; ')}</p><div class="result" style="padding-left:1rem">${md(p.text)}</div>${p.img?`<img class="thumb" src="${p.img}" alt="Reference image for this plan">`:''}<button class="btn sm ghost" style="margin-top:1rem" data-act="delplan" data-id="${p.id}">Delete plan</button></details>`).join(''):`<div class="card"><p>No plans yet. Start with the <a href="#" data-go="home">home</a>, <a href="#" data-go="jewelry">jewelry</a> or <a href="#" data-go="party">party</a> planner.</p></div>`)}};
+function render(){const guest=['index','login','register'];if(!S.session&&!guest.includes(view))view='login';if(S.session&&['login','register'].includes(view))view='dashboard';
+const body=PL[view]?V.planner(view):V[view]();document.getElementById('app').innerHTML=nav()+'<main>'+body+'</main><footer>Pocket Smart AI - plan first, spend smarter.</footer>';scrollTo(0,0)}
+function shrink(f){return new Promise(r=>{if(!f||!f.size)return r(null);if(!/^image\/(png|jpe?g|webp)$/.test(f.type)){flash('error','Reference image ignored: use PNG, JPG or WEBP.');return r(null)}const im=new Image();im.onload=()=>{const s=Math.min(1,480/im.width),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.7))};im.onerror=()=>r(null);im.src=URL.createObjectURL(f)})}
+document.addEventListener('click',async e=>{const t=e.target.closest('[data-go],[data-act]');if(!t)return;e.preventDefault();
+if(t.dataset.go){view=t.dataset.go;render();return}
+const a=t.dataset.act,id=+t.dataset.id;
+if(a==='logout'){S.session=null;save();view='index';render()}
+if(a==='delex'){S.expenses=S.expenses.filter(x=>x.id!==id);save();flash('success','Expense deleted.');render()}
+if(a==='delplan'){S.plans=S.plans.filter(x=>x.id!==id);save();flash('success','Plan deleted.');render()}});
+document.addEventListener('submit',async e=>{const f=e.target.closest('[data-form]');if(!f)return;e.preventDefault();const d=Object.fromEntries(new FormData(f)),k=f.dataset.form;
+if(k==='register'){const em=d.email.trim().toLowerCase();if(S.users.some(u=>u.email===em)){flash('error','That email is already registered. Log in instead.');view='register';return render()}
+S.users.push({id:Date.now(),name:d.name.trim(),email:em,pw:await hash(d.password),budget:20000});save();flash('success','Account created. Log in to start.');view='login';render()}
+if(k==='login'){const u=S.users.find(x=>x.email===d.email.trim().toLowerCase());if(u&&u.pw===await hash(d.password)){S.session=u.id;save();view='dashboard'}else flash('error','Email or password is incorrect.');render()}
+if(k==='budget'){const b=+d.budget;if(b>0){me().budget=b;save();flash('success','Monthly budget updated.')}else flash('error','Enter a budget greater than zero.');render()}
+if(k==='expense'){const a=+d.amount;if(!(a>0)){flash('error','Enter an amount greater than zero.');return render()}S.expenses.push({id:Date.now(),uid:S.session,title:d.title.trim()||d.category,cat:d.category,amt:a,on:d.on||new Date().toISOString().slice(0,10)});save();flash('success','Expense added.');render()}
+if(k==='ask'){const q=d.q.trim(),out=document.getElementById('out');if(!q)return;const u=me(),{by,spent}=monthData();out.textContent='Thinking...';
+const ans=await ai(`This month: budget ${inr(u.budget)}, spent ${inr(spent)}, by category ${JSON.stringify(by)}.\nQuestion: ${q}`,t=>out.innerHTML=md(t))||(()=>{const top=Object.keys(by).sort((x,y)=>by[y]-by[x])[0];return`You have **${inr(u.budget-spent)}** left of ${inr(u.budget)} (${Math.round(spent/u.budget*100)}% used).\n\n`+(top?`Your biggest category is **${top}** (${inr(by[top])}). Trim it first.\n\n`:'')+'*Offline mode: the AI assistant was unavailable.*'})();out.innerHTML=md(ans)}
+if(k==='plan'){if(busy)return;const kind=f.dataset.kind,b=+d.budget;if(!(b>0)){flash('error','Enter a budget greater than zero.');return render()}busy=true;
+const res=document.getElementById('res'),btn=f.querySelector('button');btn.disabled=true;res.textContent='Planning...';
+const img=await shrink(f.ref.files[0]),det={};for(const[n,v]of Object.entries(d))if(n!=='budget'&&n!=='ref'&&String(v).trim())det[n]=String(v).trim();
+const text=await ai(`Create a ${PL[kind].title.toLowerCase()} for a total budget of ${inr(b)}.\n`+Object.entries(det).map(([k,v])=>`- ${k}: ${v}`).join('\n'),t=>res.innerHTML=md(t))||fallback(kind,b,det);
+S.plans.push({id:Date.now(),uid:S.session,kind,budget:b,d:det,text,img});save();
+res.innerHTML=md(text)+(img?`<img src="${img}" alt="Your reference image">`:'')+'<p class="muted">Saved to <a href="#" data-go="history">History</a>.</p>';btn.disabled=false;busy=false}});
+render();
+</script></body></html>
