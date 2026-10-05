@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>
+History - Pocket Smart AI</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"></head><body>
+<header class="nav"><a class="brand" href="{{ url_for('dashboard') }}">Pocket <b>Smart</b> AI</a><nav><a href="{{ url_for('dashboard') }}">Dashboard</a><a href="{{ url_for('home_planner') }}">Home</a><a href="{{ url_for('jewelry_planner') }}">Jewelry</a><a href="{{ url_for('party_planner') }}">Party</a><a href="{{ url_for('history') }}">History</a><a href="{{ url_for('logout') }}">Log out</a></nav></header>
+<main>{% with m = get_flashed_messages(with_categories=true) %}{% for c, t in m %}<div class="flash {{ c }}" role="status">{{ t }}</div>{% endfor %}{% endwith %}<h1 style="font-size:2rem">Your saved plans</h1>
+{% for p in plans %}
+<details class="card" style="margin-bottom:1rem"><summary><span class="tag">{{ planners[p.kind].title }}</span>{{ p.budget|inr }} <span class="muted">- {{ p.created_at[:16] }}</span></summary>
+{% set d = p.details|fromjson %}{% if d %}<p class="muted">{% for k, v in d.items() %}{{ k|capitalize }}: {{ v }}{{ '; ' if not loop.last }}{% endfor %}</p>{% endif %}
+<div class="result" style="padding-left:1rem">{{ p.result|md }}</div>
+{% if p.image %}<img class="thumb" src="{{ url_for('static', filename='uploads/' ~ p.image) }}" alt="Reference image for this plan">{% endif %}
+<form method="post" action="{{ url_for('delete_plan', pid=p.id) }}"><button class="btn sm ghost" type="submit" style="margin-top:1rem">Delete plan</button></form></details>
+{% else %}<div class="card"><p>No plans yet. Start with the <a href="{{ url_for('home_planner') }}">home</a>, <a href="{{ url_for('jewelry_planner') }}">jewelry</a> or <a href="{{ url_for('party_planner') }}">party</a> planner.</p></div>{% endfor %}
+</main><footer>Pocket Smart AI - plan first, spend smarter.</footer></body></html>

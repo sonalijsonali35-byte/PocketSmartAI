@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>
+Dashboard - Pocket Smart AI</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"></head><body>
+<header class="nav"><a class="brand" href="{{ url_for('dashboard') }}">Pocket <b>Smart</b> AI</a><nav><a href="{{ url_for('dashboard') }}">Dashboard</a><a href="{{ url_for('home_planner') }}">Home</a><a href="{{ url_for('jewelry_planner') }}">Jewelry</a><a href="{{ url_for('party_planner') }}">Party</a><a href="{{ url_for('history') }}">History</a><a href="{{ url_for('logout') }}">Log out</a></nav></header>
+<main>{% with m = get_flashed_messages(with_categories=true) %}{% for c, t in m %}<div class="flash {{ c }}" role="status">{{ t }}</div>{% endfor %}{% endwith %}
+<h1 style="font-size:2rem">Hi {{ session.name }}, here is your month.</h1>
+{% set pct = (spent / budget * 100) if budget else 0 %}
+<section class="grid g3">
+<div class="card"><span class="muted">Monthly budget</span><div class="stat">{{ budget|inr }}</div>
+<form method="post" action="{{ url_for('set_budget') }}" style="display:flex;gap:.4rem;margin-top:.5rem"><input name="budget" type="number" min="1" step="any" placeholder="New budget" aria-label="New monthly budget"><button class="btn sm ghost" type="submit">Set</button></form></div>
+<div class="card"><span class="muted">Spent</span><div class="stat">{{ spent|inr }}</div>
+<div class="bar"><i class="{{ 'over' if pct > 100 }}" style="width:{{ [pct,100]|min }}%"></i></div><span class="muted">{{ pct|round|int }}% used</span></div>
+<div class="card"><span class="muted">{{ 'Left to spend' if budget >= spent else 'Over budget by' }}</span><div class="stat" style="{{ 'color:var(--coral)' if spent > budget }}">{{ (budget - spent)|abs|inr }}</div></div>
+</section>
+<section class="grid g2" style="margin-top:1.25rem">
+<div class="card"><h2>Add expense</h2>
+<form method="post" action="{{ url_for('add_expense') }}">
+<label for="title">What was it?</label><input id="title" name="title" placeholder="Lunch, auto fare...">
+<label for="amount">Amount (₹)</label><input id="amount" name="amount" type="number" min="1" step="any" required>
+<label for="category">Category</label><select id="category" name="category">{% for c in categories %}<option>{{ c }}</option>{% endfor %}</select>
+<label for="spent_on">Date</label><input id="spent_on" name="spent_on" type="date" value="{{ today }}">
+<button class="btn" type="submit">Add expense</button></form></div>
+<div class="card"><h2>Spending by category</h2>
+{% if by_cat %}<canvas id="chart" height="220" aria-label="Spending by category doughnut chart"></canvas>{% else %}<p class="muted">No expenses this month yet. Add your first one to see the chart.</p>{% endif %}</div>
+</section>
+<section class="card" style="margin-top:1.25rem"><h2>Ask Pocket Smart AI</h2>
+<p class="muted">Try: "Where can I cut ₹3,000 this month?"</p>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap"><input id="q" style="flex:1;min-width:220px" aria-label="Your question" placeholder="Ask about your budget..."><button id="ask" class="btn gold" style="margin:0" type="button">Ask</button></div>
+<div id="out" class="chat-out" aria-live="polite">Answers appear here.</div></section>
+<section class="card" style="margin-top:1.25rem"><h2>Recent expenses</h2>
+{% if expenses %}<div style="overflow-x:auto"><table><tr><th>Date</th><th>Item</th><th>Category</th><th>Amount</th><th></th></tr>
+{% for e in expenses %}<tr><td>{{ e.spent_on }}</td><td>{{ e.title }}</td><td>{{ e.category }}</td><td>{{ e.amount|inr }}</td>
+<td><form method="post" action="{{ url_for('delete_expense', eid=e.id) }}"><button class="btn sm ghost" type="submit" aria-label="Delete {{ e.title }}">Delete</button></form></td></tr>{% endfor %}</table></div>
+{% else %}<p class="muted">Nothing logged yet.</p>{% endif %}</section>
+</main><footer>Pocket Smart AI - plan first, spend smarter.</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const data={{ by_cat|tojson }};
+const cv=document.getElementById('chart');
+if(cv){new Chart(cv,{type:'doughnut',data:{labels:Object.keys(data),datasets:[{data:Object.values(data),backgroundColor:['#1F6F5C','#F2A900','#C8402F','#3B8EA5','#8E6C8A','#6DAA75','#9AA5A3']}]},options:{plugins:{legend:{position:'bottom'}}}});}
+const out=document.getElementById('out'),q=document.getElementById('q');
+async function ask(){const question=q.value.trim();if(!question)return;out.textContent='Thinking...';
+try{const r=await fetch("{{ url_for('ask') }}",{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question})});
+out.innerHTML=(await r.json()).html;}catch(e){out.textContent='Could not reach the assistant. Try again.';}}
+document.getElementById('ask').onclick=ask;q.addEventListener('keydown',e=>{if(e.key==='Enter')ask();});
+</script>
+</body></html>

@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>
+Jewelry planner - Pocket Smart AI</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"></head><body>
+<header class="nav"><a class="brand" href="{{ url_for('dashboard') }}">Pocket <b>Smart</b> AI</a><nav><a href="{{ url_for('dashboard') }}">Dashboard</a><a href="{{ url_for('home_planner') }}">Home</a><a href="{{ url_for('jewelry_planner') }}">Jewelry</a><a href="{{ url_for('party_planner') }}">Party</a><a href="{{ url_for('history') }}">History</a><a href="{{ url_for('logout') }}">Log out</a></nav></header>
+<main>{% with m = get_flashed_messages(with_categories=true) %}{% for c, t in m %}<div class="flash {{ c }}" role="status">{{ t }}</div>{% endfor %}{% endwith %}
+<h1 style="font-size:2rem">Jewelry planner</h1><p class="muted">Find the right piece for the right occasion, with making charges accounted for.</p>
+<div class="grid g2">
+<div class="card"><form method="post" enctype="multipart/form-data">
+<label for="budget">Total budget (₹)</label><input id="budget" name="budget" type="number" min="1" step="any" required value="{{ form.budget or '' }}">
+<label for="occasion">Occasion</label><select id="occasion" name="occasion"><option>Wedding</option><option>Engagement</option><option>Anniversary</option><option>Festival</option><option>Daily wear</option><option>Gift</option></select>
+<label for="type">Jewelry type</label><select id="type" name="type"><option>Necklace</option><option>Earrings</option><option>Ring</option><option>Bangles</option><option>Full set</option></select>
+<label for="metal">Metal</label><select id="metal" name="metal"><option>Gold 22K</option><option>Gold 18K</option><option>Diamond</option><option>Silver</option><option>Platinum</option></select>
+<label for="preferences">Recipient and taste</label><textarea id="preferences" name="preferences" placeholder="For my mother, prefers temple designs...">{{ form.preferences or '' }}</textarea>
+<label for="reference">Reference image (optional)</label><input id="reference" name="reference" type="file" accept="image/png,image/jpeg,image/webp">
+<button class="btn gold" type="submit">Create my plan</button></form></div>
+<div class="card result" aria-live="polite">{% if result %}{{ result }}{% if image %}<img src="{{ url_for('static', filename='uploads/' ~ image) }}" alt="Your reference image">{% endif %}<p class="muted">Saved to <a href="{{ url_for('history') }}">History</a>.</p>
+{% else %}<h3>Your plan appears here</h3><p class="muted">Fill in the form and the assistant will split your budget and suggest what to buy.</p>{% endif %}</div>
+</div></main><footer>Pocket Smart AI - plan first, spend smarter.</footer></body></html>

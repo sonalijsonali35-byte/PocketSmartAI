@@ -1,0 +1,15 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>
+Pocket Smart AI - Budget & Recommendation Assistant</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"></head><body>
+<header class="nav"><a class="brand" href="{{ url_for('index') }}">Pocket <b>Smart</b> AI</a><nav>
+{% if session.user_id %}<a href="{{ url_for('dashboard') }}">Dashboard</a><a href="{{ url_for('logout') }}">Log out</a>
+{% else %}<a href="{{ url_for('login') }}">Log in</a><a class="btn gold sm" href="{{ url_for('register') }}">Create account</a>{% endif %}</nav></header>
+<main>
+<section class="hero"><h1>Know what you can spend before you spend it.</h1>
+<p>Track your monthly budget, then ask the AI to plan your next home makeover, jewelry purchase or party, down to the rupee.</p>
+<a class="btn gold" href="{{ url_for('register') }}">Start free</a> <a class="btn ghost" href="{{ url_for('login') }}">I have an account</a></section>
+<section class="grid g3">
+<div class="card"><h3>Budget tracker</h3><p class="muted">Log expenses, watch your category chart and see what is left this month.</p></div>
+<div class="card"><h3>Three smart planners</h3><p class="muted">Home, jewelry and party plans that never exceed the budget you set.</p></div>
+<div class="card"><h3>Ask anything</h3><p class="muted">Chat with an assistant that knows your real spending this month.</p></div>
+</section></main>
+<footer>Pocket Smart AI - plan first, spend smarter.</footer></body></html>

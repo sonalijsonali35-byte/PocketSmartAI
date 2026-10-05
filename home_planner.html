@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>
+Home planner - Pocket Smart AI</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"></head><body>
+<header class="nav"><a class="brand" href="{{ url_for('dashboard') }}">Pocket <b>Smart</b> AI</a><nav><a href="{{ url_for('dashboard') }}">Dashboard</a><a href="{{ url_for('home_planner') }}">Home</a><a href="{{ url_for('jewelry_planner') }}">Jewelry</a><a href="{{ url_for('party_planner') }}">Party</a><a href="{{ url_for('history') }}">History</a><a href="{{ url_for('logout') }}">Log out</a></nav></header>
+<main>{% with m = get_flashed_messages(with_categories=true) %}{% for c, t in m %}<div class="flash {{ c }}" role="status">{{ t }}</div>{% endfor %}{% endwith %}
+<h1 style="font-size:2rem">Home planner</h1><p class="muted">Furnish or refresh a room without overspending.</p>
+<div class="grid g2">
+<div class="card"><form method="post" enctype="multipart/form-data">
+<label for="budget">Total budget (₹)</label><input id="budget" name="budget" type="number" min="1" step="any" required value="{{ form.budget or '' }}">
+<label for="room">Room</label><select id="room" name="room"><option>Living room</option><option>Bedroom</option><option>Kitchen</option><option>Home office</option><option>Kids room</option></select>
+<label for="style">Style</label><select id="style" name="style"><option>Modern minimal</option><option>Traditional Indian</option><option>Scandinavian</option><option>Boho</option><option>Industrial</option></select>
+<label for="size">Room size</label><input id="size" name="size" placeholder="e.g. 12 x 14 ft" value="{{ form.size or '' }}">
+<label for="priorities">Priorities</label><textarea id="priorities" name="priorities" placeholder="Storage, natural light, pet friendly...">{{ form.priorities or '' }}</textarea>
+<label for="reference">Reference image (optional)</label><input id="reference" name="reference" type="file" accept="image/png,image/jpeg,image/webp">
+<button class="btn gold" type="submit">Create my plan</button></form></div>
+<div class="card result" aria-live="polite">{% if result %}{{ result }}{% if image %}<img src="{{ url_for('static', filename='uploads/' ~ image) }}" alt="Your reference image">{% endif %}<p class="muted">Saved to <a href="{{ url_for('history') }}">History</a>.</p>
+{% else %}<h3>Your plan appears here</h3><p class="muted">Fill in the form and the assistant will split your budget and suggest what to buy.</p>{% endif %}</div>
+</div></main><footer>Pocket Smart AI - plan first, spend smarter.</footer></body></html>
